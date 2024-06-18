@@ -9,5 +9,6 @@ if(elementoSaldo){  //se o elementoSaldo for true ele nunca será nulo e assim o
 }
 
 if(elementoDataAcesso){
-    elementoDataAcesso.textContent = formatarData(new Date(),FormatoData.LONGO);
+    elementoDataAcesso.textContent = formatarData(new Date(), FormatoData.LONGO);
+
 }

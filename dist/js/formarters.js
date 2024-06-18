@@ -2,13 +2,7 @@
 function formatarMoeda(valor) {
     return valor.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
 }
-var FormatoData;
-(function (FormatoData) {
-    FormatoData["LONGO"] = "longo";
-    FormatoData["CURTO"] = "curto";
-    FormatoData["MES"] = "mes";
-})(FormatoData || (FormatoData = {}));
-function formatarData(data, formato) {
+function formatarData(data, formato = FormatoData.CURTO) {
     if (formato === FormatoData.LONGO) {
         return data.toLocaleDateString("pt-br", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
     }
