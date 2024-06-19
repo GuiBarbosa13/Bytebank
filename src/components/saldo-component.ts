@@ -1,26 +1,30 @@
 import { formatarMoeda, formatarData } from "../utils/formarters.js";
 import { FormatoData } from "../types/FormatoData.js";
+import Conta from "../types/Conta.js";
 
-let saldo: number = 3000;
-
+//elementos HTML
 const elementoSaldo = document.querySelector('.saldo-valor .valor') as HTMLElement;
-
 const elementoDataAcesso = document.querySelector('.block-saldo time') as HTMLElement;
 
+
+//renderização de data
 if(elementoDataAcesso){
-    elementoDataAcesso.textContent = formatarData(new Date(), FormatoData.LONGO);
+    elementoDataAcesso.textContent = formatarData(Conta.getDataAcesso(), FormatoData.LONGO);
 }
 
-export function getSaldo(): number{
-    return saldo
-};
 
-atualizarSaldo(saldo);
-
-export function atualizarSaldo(novoSaldo:number):void{
-    saldo=novoSaldo;
-
+//renderização de saldo
+function renderizarSaldo():void{
     if(elementoSaldo){  //se o elementoSaldo for true ele nunca será nulo e assim o TS não reclamará dessa possibilidade!
-        elementoSaldo.textContent = formatarMoeda(saldo);
+        elementoSaldo.textContent = formatarMoeda(Conta.getSaldo());
     }
 }
+
+//método para atribuir a atualização de saldo para renderização
+const SaldoComponent = {
+    atualizar(){
+        renderizarSaldo();
+    }
+}
+
+export default SaldoComponent;

@@ -1,8 +1,8 @@
 import { TipoTransacao } from "../types/TipoTransacao.js";
-import { getSaldo, atualizarSaldo } from "./saldo-component.js";
 import { Transacao } from "../types/Transacao.js";
+import Conta from "../types/Conta.js";
+import SaldoComponent from "./saldo-component.js";
 
-let saldo:number = getSaldo();
 
 const elementoFormulario = document.querySelector('.block-nova-transacao form') as HTMLFormElement; //estou garantindo que o elementoFormulario é um elemento HTML para o TS.
 
@@ -22,16 +22,6 @@ elementoFormulario.addEventListener('submit', function (evento) {
     let valorTransacao : number = Number(inputValor.value);
     let dataTransacao : Date = new Date (inputData.value);
 
-    if(tipoTransacao === TipoTransacao.DEPOSITO){
-        saldo += valorTransacao;
-    }else if(tipoTransacao == TipoTransacao.TRANSFERENCIA || tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO){
-        saldo-= valorTransacao;
-    }else{
-        alert("Tipo de transação inválido!");
-        return
-    }
-
-    atualizarSaldo(saldo);
 
 
     const novaTransacao: Transacao = {
@@ -40,5 +30,7 @@ elementoFormulario.addEventListener('submit', function (evento) {
         data: dataTransacao,
     }
 
+    Conta.regsitrarTransacao(novaTransacao);
+    SaldoComponent.atualizar();
     elementoFormulario.reset();     //limpa o formulário permitindo uma nova resposta.
 })
