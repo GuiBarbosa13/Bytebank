@@ -1,8 +1,8 @@
-"use strict";
-function formatarMoeda(valor) {
+import { FormatoData } from "../types/FormatoData.js";
+export function formatarMoeda(valor) {
     return valor.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
 }
-function formatarData(data, formato = FormatoData.CURTO) {
+export function formatarData(data, formato = FormatoData.CURTO) {
     if (formato === FormatoData.LONGO) {
         return data.toLocaleDateString("pt-br", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
     }
@@ -13,6 +13,6 @@ function formatarData(data, formato = FormatoData.CURTO) {
         return data.toLocaleDateString("pt-br", { month: "long" });
     }
     else {
-        return "Data inválida";
+        return data.toLocaleString("pt-br");
     }
 }

@@ -1,5 +1,4 @@
-"use strict";
-var FormatoData;
+export var FormatoData;
 (function (FormatoData) {
     FormatoData["LONGO"] = "DIA_SEMANA, DD/MM/AAAA";
     FormatoData["CURTO"] = "DD/MM";

@@ -1,3 +1,9 @@
+import { TipoTransacao } from "../types/TipoTransacao.js";
+import { getSaldo, atualizarSaldo } from "./saldo-component.js";
+import { Transacao } from "../types/Transacao.js";
+
+let saldo:number = getSaldo();
+
 const elementoFormulario = document.querySelector('.block-nova-transacao form') as HTMLFormElement; //estou garantindo que o elementoFormulario é um elemento HTML para o TS.
 
 elementoFormulario.addEventListener('submit', function (evento) {
@@ -25,7 +31,7 @@ elementoFormulario.addEventListener('submit', function (evento) {
         return
     }
 
-    elementoSaldo.textContent=formatarMoeda(saldo);
+    atualizarSaldo(saldo);
 
 
     const novaTransacao: Transacao = {

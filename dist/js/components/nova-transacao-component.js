@@ -1,4 +1,6 @@
-"use strict";
+import { TipoTransacao } from "../types/TipoTransacao.js";
+import { getSaldo, atualizarSaldo } from "./saldo-component.js";
+let saldo = getSaldo();
 const elementoFormulario = document.querySelector('.block-nova-transacao form'); //estou garantindo que o elementoFormulario é um elemento HTML para o TS.
 elementoFormulario.addEventListener('submit', function (evento) {
     evento.preventDefault(); //não permite que a página seja recarregada quando o formulário é submetido
@@ -22,7 +24,7 @@ elementoFormulario.addEventListener('submit', function (evento) {
         alert("Tipo de transação inválido!");
         return;
     }
-    elementoSaldo.textContent = formatarMoeda(saldo);
+    atualizarSaldo(saldo);
     const novaTransacao = {
         tipoTransacao: tipoTransacao,
         valor: valorTransacao,
