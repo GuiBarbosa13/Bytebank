@@ -27,4 +27,6 @@ const SaldoComponent = {
     }
 }
 
+SaldoComponent.atualizar();
+
 export default SaldoComponent;

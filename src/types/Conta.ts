@@ -17,20 +17,26 @@ console.log(transacoes);
 
 console.log(transacoes);
 
-function debitar(valor:number):void{
-    if(valor<=0){throw new Error("O valor precisa ser maior que 0!")}
+function debitar(valor: number): void {
+    if (valor <= 0) { throw new Error("O valor precisa ser maior que 0!") }
 
-    if(saldo >= valor){saldo-=valor}
-        else{throw new Error("Saldo insuficiente!")    
+    if (saldo >= valor) {
+        saldo -= valor;
+        localStorage.setItem("saldo", saldo.toString())
+    } else {
+        throw new Error("Saldo insuficiente!")
     }
 }
 
-function depositar (valor: number):void{
-    if (valor <= 0){
-        throw new Error ("O valor precisa ser maior que 0!")
-    }else{
-        saldo+=valor
-    }    
+function depositar(valor: number): void {
+    if (valor <= 0) {
+        throw new Error("O valor precisa ser maior que 0!")
+    } else {
+        saldo += valor;
+        localStorage.setItem("saldo", saldo.toString())
+    }
+
+
 }
 
 const Conta = {
@@ -45,7 +51,7 @@ const Conta = {
     regsitrarTransacao(novaTransacao: Transacao): void {
         if (novaTransacao.tipoTransacao === TipoTransacao.DEPOSITO) {
             depositar(novaTransacao.valor);
-        } else if ( novaTransacao.tipoTransacao == TipoTransacao.TRANSFERENCIA || novaTransacao.tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO) {
+        } else if (novaTransacao.tipoTransacao == TipoTransacao.TRANSFERENCIA || novaTransacao.tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO) {
             debitar(novaTransacao.valor);
         } else {
             throw new Error("Esse tipo de transação é inválido!")

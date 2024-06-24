@@ -20,4 +20,5 @@ const SaldoComponent = {
         renderizarSaldo();
     }
 };
+SaldoComponent.atualizar();
 export default SaldoComponent;
