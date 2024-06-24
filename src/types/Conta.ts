@@ -1,3 +1,4 @@
+import { GrupoTransacao } from "./GrupoTransacao.js";
 import { TipoTransacao } from "./TipoTransacao.js";
 import { Transacao } from "./Transacao.js";
 
@@ -11,11 +12,6 @@ const transacoes: Transacao[] = transacoesString ? JSON.parse(transacoesString, 
     }
     return value;
 }) : [];
-
-console.log(transacoes);
-
-
-console.log(transacoes);
 
 function debitar(valor: number): void {
     if (valor <= 0) { throw new Error("O valor precisa ser maior que 0!") }
@@ -48,6 +44,28 @@ const Conta = {
         return new Date();
     },
 
+    getGruposTransacoes(): GrupoTransacao[]{
+        const gruposTransacoes: GrupoTransacao[] = [];
+        const listaTransacoes: Transacao[] = structuredClone(transacoes);
+        const transacoesOrdenadas: Transacao[] = listaTransacoes.sort((t1,t2) => t2.data.getTime() - t1.data.getTime())
+        let labelAtualGrupoTransacao: string = "";
+
+        for (let transacao of transacoesOrdenadas){
+            let labelGrupoTransacao: string = transacao.data.toLocaleDateString("pt-br", {month:"long", year:"numeric"})
+            if(labelGrupoTransacao != labelAtualGrupoTransacao){
+                labelAtualGrupoTransacao = labelGrupoTransacao;
+                gruposTransacoes.push(
+                    {label: labelGrupoTransacao,
+                    transacoes: []}
+                )
+            }
+
+            gruposTransacoes[gruposTransacoes.length - 1].transacoes.push(transacao);
+        }
+        
+        return gruposTransacoes;
+    },
+
     regsitrarTransacao(novaTransacao: Transacao): void {
         if (novaTransacao.tipoTransacao === TipoTransacao.DEPOSITO) {
             depositar(novaTransacao.valor);
@@ -59,8 +77,8 @@ const Conta = {
         }
 
         transacoes.push(novaTransacao);
-        console.log(novaTransacao);
         localStorage.setItem("transacoes", JSON.stringify(transacoes));
+        console.log(this.getGruposTransacoes());
     }
 }
 

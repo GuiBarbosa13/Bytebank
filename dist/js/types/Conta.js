@@ -8,8 +8,6 @@ const transacoes = transacoesString ? JSON.parse(transacoesString, (key, value) 
     }
     return value;
 }) : [];
-console.log(transacoes);
-console.log(transacoes);
 function debitar(valor) {
     if (valor <= 0) {
         throw new Error("O valor precisa ser maior que 0!");
@@ -38,6 +36,22 @@ const Conta = {
     getDataAcesso() {
         return new Date();
     },
+    getGruposTransacoes() {
+        const gruposTransacoes = [];
+        const listaTransacoes = structuredClone(transacoes);
+        const transacoesOrdenadas = listaTransacoes.sort((t1, t2) => t2.data.getTime() - t1.data.getTime());
+        let labelAtualGrupoTransacao = "";
+        for (let transacao of transacoesOrdenadas) {
+            let labelGrupoTransacao = transacao.data.toLocaleDateString("pt-br", { month: "long", year: "numeric" });
+            if (labelGrupoTransacao != labelAtualGrupoTransacao) {
+                labelAtualGrupoTransacao = labelGrupoTransacao;
+                gruposTransacoes.push({ label: labelGrupoTransacao,
+                    transacoes: [] });
+            }
+            gruposTransacoes[gruposTransacoes.length - 1].transacoes.push(transacao);
+        }
+        return gruposTransacoes;
+    },
     regsitrarTransacao(novaTransacao) {
         if (novaTransacao.tipoTransacao === TipoTransacao.DEPOSITO) {
             depositar(novaTransacao.valor);
@@ -50,8 +64,8 @@ const Conta = {
             // alert("Tipo de transação inválido!");
         }
         transacoes.push(novaTransacao);
-        console.log(novaTransacao);
         localStorage.setItem("transacoes", JSON.stringify(transacoes));
+        console.log(this.getGruposTransacoes());
     }
 };
 export default Conta;
