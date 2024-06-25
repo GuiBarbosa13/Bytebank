@@ -71,6 +71,7 @@ const Conta = {
             depositar(novaTransacao.valor);
         } else if (novaTransacao.tipoTransacao == TipoTransacao.TRANSFERENCIA || novaTransacao.tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO) {
             debitar(novaTransacao.valor);
+            novaTransacao.valor *= -1;
         } else {
             throw new Error("Esse tipo de transação é inválido!")
             // alert("Tipo de transação inválido!");
@@ -78,7 +79,6 @@ const Conta = {
 
         transacoes.push(novaTransacao);
         localStorage.setItem("transacoes", JSON.stringify(transacoes));
-        console.log(this.getGruposTransacoes());
     }
 }
 
