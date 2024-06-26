@@ -21,10 +21,10 @@ function renderizarExtrato() {
             `;
         });
         htmlRegistroTransacoes += `
-             <div class="transacoes-group">
+            <div class="transacoes-group">
                 <strong class="mes-group">${grupo.label}</strong>
                 ${htmlItemTransacao}
-            <div>
+            </div>
         `;
     });
     if (htmlRegistroTransacoes === "") {
