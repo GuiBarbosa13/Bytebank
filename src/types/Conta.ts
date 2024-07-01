@@ -1,3 +1,4 @@
+import { Armazenador } from "./Armazenador.js";
 import { GrupoTransacao } from "./GrupoTransacao.js";
 import { TipoTransacao } from "./TipoTransacao.js";
 import { Transacao } from "./Transacao.js"
@@ -5,25 +6,27 @@ import { Transacao } from "./Transacao.js"
 export class Conta{
     nome: string = ""
 
-    saldoString: string | null = localStorage.getItem("saldo");
-    saldo: number = this.saldoString? JSON.parse(this.saldoString) : 0
+    protected saldo: number = Armazenador.obter<number>("saldo") || 0;
 
-    transacoesString = localStorage.getItem("transacoes");
-    transacoes: Transacao[] = this.transacoesString ? JSON.parse(this.transacoesString, (key: string, value: string) => {
+    private transacoes: Transacao[] = Armazenador.obter<Transacao[]>(("transacoes"), (key: string, value:any) => {
         if (key === "data") {
             return new Date(value);
         }
         return value;
-    }) : [];
+    }) || [];
 
     constructor (nome: string){
         this.nome = nome
     }
 
+    public getTitular(): string{
+        return this.nome;
+    }
+
     getGruposTransacoes(): GrupoTransacao[]{
         const gruposTransacoes: GrupoTransacao[] = [];
         const listaTransacoes: Transacao[] = structuredClone(this.transacoes);
-        const transacoesOrdenadas: Transacao[] = listaTransacoes.sort((t1,t2) => t2.data.getTime() - t1.data.getTime())
+        const transacoesOrdenadas: Transacao[] = listaTransacoes.sort((t1,t2) => t2.data.getTime() - t1.data.getTime());
         let labelAtualGrupoTransacao: string = "";
 
         for (let transacao of transacoesOrdenadas){
@@ -55,7 +58,7 @@ export class Conta{
     
         if (this.saldo >= valor) {
             this.saldo -= valor;
-            localStorage.setItem("saldo", this.saldo.toString())
+            Armazenador.salvar("saldo", this.saldo.toString())
         } else {
             throw new Error("Saldo insuficiente!")
         }
@@ -66,7 +69,7 @@ export class Conta{
             throw new Error("O valor precisa ser maior que 0!")
         } else {
             this.saldo += valor;
-            localStorage.setItem("saldo", this.saldo.toString())
+            Armazenador.salvar("saldo", this.saldo.toString())
         }
     }
 
@@ -81,11 +84,26 @@ export class Conta{
             // alert("Tipo de transação inválido!");
         }
 
+        console.log(this.transacoes);
         this.transacoes.push(novaTransacao);
-        localStorage.setItem("transacoes", JSON.stringify(this.transacoes));
+        Armazenador.salvar("transacoes", JSON.stringify(this.transacoes));
+    }
+}
+
+export class ContaPremium extends Conta{
+    registrarTransacao(transacao: Transacao):void {
+        if (transacao.tipoTransacao === TipoTransacao.DEPOSITO){
+            console.log("Ganhou um bônus de R$ 0,50")
+            transacao.valor += 0.5;
+
+        }
+
+        super.regsitrarTransacao(transacao);
+
     }
 }
 
 const conta = new Conta("Joana da Silva Oliveira");
+const contaPremium = new ContaPremium("Guilherme da Silva Barbosa")
 
 export default conta

@@ -1,17 +1,19 @@
+import { Armazenador } from "./Armazenador.js";
 import { TipoTransacao } from "./TipoTransacao.js";
 export class Conta {
     constructor(nome) {
         this.nome = "";
-        this.saldoString = localStorage.getItem("saldo");
-        this.saldo = this.saldoString ? JSON.parse(this.saldoString) : 0;
-        this.transacoesString = localStorage.getItem("transacoes");
-        this.transacoes = this.transacoesString ? JSON.parse(this.transacoesString, (key, value) => {
+        this.saldo = Armazenador.obter("saldo") || 0;
+        this.transacoes = Armazenador.obter(("transacoes"), (key, value) => {
             if (key === "data") {
                 return new Date(value);
             }
             return value;
-        }) : [];
+        }) || [];
         this.nome = nome;
+    }
+    getTitular() {
+        return this.nome;
     }
     getGruposTransacoes() {
         const gruposTransacoes = [];
@@ -41,7 +43,7 @@ export class Conta {
         }
         if (this.saldo >= valor) {
             this.saldo -= valor;
-            localStorage.setItem("saldo", this.saldo.toString());
+            Armazenador.salvar("saldo", this.saldo.toString());
         }
         else {
             throw new Error("Saldo insuficiente!");
@@ -53,7 +55,7 @@ export class Conta {
         }
         else {
             this.saldo += valor;
-            localStorage.setItem("saldo", this.saldo.toString());
+            Armazenador.salvar("saldo", this.saldo.toString());
         }
     }
     regsitrarTransacao(novaTransacao) {
@@ -68,8 +70,9 @@ export class Conta {
             throw new Error("Esse tipo de transação é inválido!");
             // alert("Tipo de transação inválido!");
         }
+        console.log(this.transacoes);
         this.transacoes.push(novaTransacao);
-        localStorage.setItem("transacoes", JSON.stringify(this.transacoes));
+        Armazenador.salvar("transacoes", JSON.stringify(this.transacoes));
     }
 }
 const conta = new Conta("Joana da Silva Oliveira");
