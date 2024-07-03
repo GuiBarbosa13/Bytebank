@@ -12,6 +12,13 @@ if(elementoDataAcesso){
     elementoDataAcesso.textContent = formatarData(Conta.getDataAcesso(), FormatoData.LONGO);
 }
 
+//método para atribuir a atualização de saldo para renderização
+const SaldoComponent = {
+    atualizar(){
+        renderizarSaldo();
+    }
+}
+SaldoComponent.atualizar();
 
 //renderização de saldo
 function renderizarSaldo():void{
@@ -20,13 +27,6 @@ function renderizarSaldo():void{
     }
 }
 
-//método para atribuir a atualização de saldo para renderização
-const SaldoComponent = {
-    atualizar(){
-        renderizarSaldo();
-    }
-}
 
-SaldoComponent.atualizar();
 
 export default SaldoComponent;

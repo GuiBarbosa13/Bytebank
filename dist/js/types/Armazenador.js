@@ -9,8 +9,8 @@ export class Armazenador {
         if (valor === null) {
             return null;
         }
-        if (reviver === null) {
-            return JSON.parse(reviver);
+        if (reviver) {
+            return JSON.parse(valor, reviver);
         }
         return JSON.parse(valor);
     }

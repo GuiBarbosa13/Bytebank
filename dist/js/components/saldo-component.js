@@ -8,12 +8,6 @@ const elementoDataAcesso = document.querySelector('.block-saldo time');
 if (elementoDataAcesso) {
     elementoDataAcesso.textContent = formatarData(Conta.getDataAcesso(), FormatoData.LONGO);
 }
-//renderização de saldo
-function renderizarSaldo() {
-    if (elementoSaldo) { //se o elementoSaldo for true ele nunca será nulo e assim o TS não reclamará dessa possibilidade!
-        elementoSaldo.textContent = formatarMoeda(Conta.getSaldo());
-    }
-}
 //método para atribuir a atualização de saldo para renderização
 const SaldoComponent = {
     atualizar() {
@@ -21,4 +15,10 @@ const SaldoComponent = {
     }
 };
 SaldoComponent.atualizar();
+//renderização de saldo
+function renderizarSaldo() {
+    if (elementoSaldo) { //se o elementoSaldo for true ele nunca será nulo e assim o TS não reclamará dessa possibilidade!
+        elementoSaldo.textContent = formatarMoeda(Conta.getSaldo());
+    }
+}
 export default SaldoComponent;
